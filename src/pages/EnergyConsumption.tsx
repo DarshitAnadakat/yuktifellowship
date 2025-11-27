@@ -8,7 +8,7 @@ import { motion } from "framer-motion"
 import { 
   FaBolt, FaChartLine, FaWallet, FaLeaf, FaHome, FaChartBar, 
   FaShoppingCart, FaCog, FaSignOutAlt, FaSync, FaArrowUp, 
-  FaArrowDown, FaLightbulb, FaClock, FaSolarPanel, FaFan
+  FaArrowDown, FaClock, FaSolarPanel, FaFan
 } from "react-icons/fa"
 import { signOutUser } from "../services/authService"
 import {
@@ -79,15 +79,15 @@ const EnergyConsumption = () => {
         fill: true,
         tension: 0.4
       },
-      compareMode && {
+      ...(compareMode ? [{
         label: "Previous Week",
         data: [100, 130, 150, 110, 140, 130, 120],
         borderColor: "rgb(59, 130, 246)",
         backgroundColor: "rgba(59, 130, 246, 0.1)",
         fill: true,
         tension: 0.4
-      }
-    ].filter(Boolean)
+      }] : [])
+    ]
   }
 
   const efficiencyData = {

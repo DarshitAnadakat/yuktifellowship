@@ -22,17 +22,17 @@ const ProfileSetupContact = () => {
   const designations = ["CEO", "Director", "Manager", "Executive", "Other"]
   const departments = ["Administration", "Operations", "Finance", "Technical", "Other"]
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     navigate("/profile-setup-kyc")
   }
 
-  const isStepComplete = (stepNumber) => {
+  const isStepComplete = (stepNumber: number) => {
     switch (stepNumber) {
       case 1:
         return formData.firstName && formData.lastName && formData.email && formData.phone

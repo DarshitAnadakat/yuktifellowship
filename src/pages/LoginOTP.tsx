@@ -19,7 +19,7 @@ const LoginOTP = () => {
     }
   }, [timeLeft])
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsVerifying(true)
     await new Promise(resolve => setTimeout(resolve, 1500))
@@ -33,7 +33,7 @@ const LoginOTP = () => {
     setIsResending(false)
   }
 
-  const handleOTPChange = (index, value) => {
+  const handleOTPChange = (index: number, value: string) => {
     if (value.length > 1) value = value[0]
     if (!/^\d*$/.test(value)) return
 
@@ -42,14 +42,14 @@ const LoginOTP = () => {
     setOtp(newOTP)
 
     if (value && index < 5) {
-      const nextInput = document.querySelector(`input[name=otp-${index + 1}]`)
+      const nextInput = document.querySelector(`input[name=otp-${index + 1}]`) as HTMLInputElement
       if (nextInput) nextInput.focus()
     }
   }
 
-  const handleKeyDown = (index, e) => {
+  const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
-      const prevInput = document.querySelector(`input[name=otp-${index - 1}]`)
+      const prevInput = document.querySelector(`input[name=otp-${index - 1}]`) as HTMLInputElement
       if (prevInput) prevInput.focus()
     }
   }

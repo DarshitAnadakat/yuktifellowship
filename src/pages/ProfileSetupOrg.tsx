@@ -28,12 +28,12 @@ const ProfileSetupOrg = () => {
   const orgTypes = ["Private Limited", "Public Limited", "Partnership", "Proprietorship", "Others"]
   const industries = ["Manufacturing", "Energy", "Technology", "Retail", "Others"]
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
     if (!currentUser) {
@@ -66,7 +66,7 @@ const ProfileSetupOrg = () => {
     }
   }
 
-  const isStepComplete = (stepNumber) => {
+  const isStepComplete = (stepNumber: number) => {
     switch (stepNumber) {
       case 1:
         return formData.orgName && formData.orgType && formData.industry

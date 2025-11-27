@@ -22,8 +22,9 @@ const ProfileSetupKYC = () => {
   const idTypes = ["Aadhaar Card", "PAN Card", "Driving License", "Passport"]
   const addressProofTypes = ["Utility Bill", "Bank Statement", "Rent Agreement", "Property Tax Receipt"]
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    const files = (e.target as HTMLInputElement).files
     if (files) {
       setFormData(prev => ({ ...prev, [name]: files[0] }))
     } else {
@@ -31,12 +32,12 @@ const ProfileSetupKYC = () => {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     navigate("/dashboard")
   }
 
-  const isStepComplete = (stepNumber) => {
+  const isStepComplete = (stepNumber: number) => {
     switch (stepNumber) {
       case 1:
         return formData.idType && formData.idNumber && formData.idFront && formData.idBack
@@ -49,7 +50,7 @@ const ProfileSetupKYC = () => {
     }
   }
 
-  const renderFileInput = (name, label, accept = "image/*") => (
+  const renderFileInput = (name: string, label: string, accept = "image/*") => (
     <div>
       <label className="block text-white/90 text-sm font-medium mb-2">{label}</label>
       <div className="relative">
@@ -68,7 +69,7 @@ const ProfileSetupKYC = () => {
           <div className="flex items-center gap-3">
             <FaUpload className="text-2xl text-cyan-300 group-hover:scale-110 transition-transform" />
             <span className="text-white/80">
-              {formData[name] ? formData[name].name : `Upload ${label}`}
+              {formData[name as keyof typeof formData] && typeof formData[name as keyof typeof formData] === 'object' && (formData[name as keyof typeof formData] as File).name ? (formData[name as keyof typeof formData] as File).name : `Upload ${label}`}
             </span>
           </div>
         </label>
