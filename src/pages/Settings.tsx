@@ -1,9 +1,18 @@
 "use client"
 
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { BoltIcon } from "../components/Icons"
+import { motion } from "framer-motion"
+import { 
+  FaBolt, FaHome, FaShoppingCart, FaCog, FaSignOutAlt,
+  FaUser, FaBell, FaCreditCard, FaLock, FaSlidersH, FaCamera,
+  FaEnvelope, FaPhone, FaSave, FaToggleOn, FaToggleOff
+} from "react-icons/fa"
+import { signOutUser } from "../services/authService"
 
 const Settings = () => {
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState("profile")
   const [notifications, setNotifications] = useState({
     email: true,
@@ -16,21 +25,29 @@ const Settings = () => {
     }
   })
 
-  const tabs = [
-    { id: "profile", label: "Profile", icon: "👤" },
-    { id: "notifications", label: "Notifications", icon: "🔔" },
-    { id: "billing", label: "Billing", icon: "💳" },
-    { id: "security", label: "Security", icon: "🔒" },
-    { id: "preferences", label: "Preferences", icon: "⚙️" }
+  // Sidebar navigation items
+  const sidebarItems = [
+    { icon: FaHome, label: "Dashboard", path: "/dashboard" },
+    { icon: FaBolt, label: "Energy", path: "/energy-consumption" },
+    { icon: FaShoppingCart, label: "Purchases", path: "/purchases" },
+    { icon: FaCog, label: "Settings", path: "/settings", active: true },
   ]
 
-  const handleNotificationChange = (key, value) => {
+  const tabs = [
+    { id: "profile", label: "Profile", icon: FaUser },
+    { id: "notifications", label: "Notifications", icon: FaBell },
+    { id: "billing", label: "Billing", icon: FaCreditCard },
+    { id: "security", label: "Security", icon: FaLock },
+    { id: "preferences", label: "Preferences", icon: FaSlidersH }
+  ]
+
+  const handleNotificationChange = (key: string, value: boolean) => {
     if (key.includes(".")) {
       const [parent, child] = key.split(".")
       setNotifications(prev => ({
         ...prev,
         [parent]: {
-          ...prev[parent],
+          ...(prev as any)[parent],
           [child]: value
         }
       }))
@@ -44,82 +61,93 @@ const Settings = () => {
 
   const renderProfileSettings = () => (
     <div className="space-y-6">
-      <div className="flex items-center space-x-6">
-        <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center text-3xl">
-          👤
+      <div className="flex items-center gap-6">
+        <div className="relative">
+          <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center text-3xl">
+            <FaUser className="text-white" />
+          </div>
+          <button className="absolute bottom-0 right-0 w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center hover:bg-emerald-700 transition-all">
+            <FaCamera className="text-white text-sm" />
+          </button>
         </div>
         <div>
-          <h3 className="text-lg font-medium text-gray-900">Profile Picture</h3>
-          <p className="text-sm text-gray-500 mt-1">Update your profile picture</p>
-          <button className="mt-3 text-sm text-green-600 hover:text-green-700 font-medium">
-            Change Photo
-          </button>
+          <h3 className="text-lg font-semibold text-white">Profile Picture</h3>
+          <p className="text-sm text-white/60 mt-1">Update your profile picture</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700">First Name</label>
+          <label className="block text-sm font-medium text-white/80 mb-2">First Name</label>
           <input
             type="text"
-            className="mt-1 block w-full rounded-lg border border-gray-200 px-4 py-2 text-gray-900 focus:border-green-500 focus:ring-2 focus:ring-green-500"
+            className="w-full rounded-xl border border-white/20 bg-white/10 backdrop-blur-xl px-4 py-3 text-white placeholder-white/40 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             placeholder="John"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Last Name</label>
+          <label className="block text-sm font-medium text-white/80 mb-2">Last Name</label>
           <input
             type="text"
-            className="mt-1 block w-full rounded-lg border border-gray-200 px-4 py-2 text-gray-900 focus:border-green-500 focus:ring-2 focus:ring-green-500"
+            className="w-full rounded-xl border border-white/20 bg-white/10 backdrop-blur-xl px-4 py-3 text-white placeholder-white/40 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             placeholder="Doe"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Email</label>
+          <label className="block text-sm font-medium text-white/80 mb-2">Email</label>
           <input
             type="email"
-            className="mt-1 block w-full rounded-lg border border-gray-200 px-4 py-2 text-gray-900 focus:border-green-500 focus:ring-2 focus:ring-green-500"
+            className="w-full rounded-xl border border-white/20 bg-white/10 backdrop-blur-xl px-4 py-3 text-white placeholder-white/40 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             placeholder="john@example.com"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Phone</label>
+          <label className="block text-sm font-medium text-white/80 mb-2">Phone</label>
           <input
             type="tel"
-            className="mt-1 block w-full rounded-lg border border-gray-200 px-4 py-2 text-gray-900 focus:border-green-500 focus:ring-2 focus:ring-green-500"
+            className="w-full rounded-xl border border-white/20 bg-white/10 backdrop-blur-xl px-4 py-3 text-white placeholder-white/40 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             placeholder="+91 1234567890"
           />
         </div>
       </div>
+
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className="mt-6 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-8 py-3 rounded-xl hover:shadow-lg transition-all flex items-center gap-2"
+      >
+        <FaSave />
+        Save Changes
+      </motion.button>
     </div>
   )
 
   const renderNotificationSettings = () => (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Notification Channels</h3>
+        <h3 className="text-lg font-semibold text-white mb-4">Notification Channels</h3>
         <div className="space-y-4">
           {[
-            { key: "email", label: "Email Notifications" },
-            { key: "push", label: "Push Notifications" },
-            { key: "sms", label: "SMS Notifications" }
-          ].map(({ key, label }) => (
-            <div key={key} className="flex items-center justify-between">
-              <div>
-                <h4 className="text-sm font-medium text-gray-700">{label}</h4>
-                <p className="text-sm text-gray-500">Receive updates via {key}</p>
+            { key: "email", label: "Email Notifications", icon: FaEnvelope },
+            { key: "push", label: "Push Notifications", icon: FaBell },
+            { key: "sms", label: "SMS Notifications", icon: FaPhone }
+          ].map(channel => (
+            <div key={channel.key} className="flex items-center justify-between p-4 bg-white/5 rounded-xl">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                  <channel.icon className="text-blue-400" />
+                </div>
+                <span className="text-white font-medium">{channel.label}</span>
               </div>
               <button
-                onClick={() => handleNotificationChange(key, !notifications[key])}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none ${
-                  notifications[key] ? "bg-green-600" : "bg-gray-200"
-                }`}
+                onClick={() => handleNotificationChange(channel.key, !(notifications as any)[channel.key])}
+                className="relative"
               >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition duration-200 ease-in-out ${
-                    notifications[key] ? "translate-x-6" : "translate-x-1"
-                  }`}
-                />
+                {(notifications as any)[channel.key] ? (
+                  <FaToggleOn className="text-4xl text-emerald-500" />
+                ) : (
+                  <FaToggleOff className="text-4xl text-white/30" />
+                )}
               </button>
             </div>
           ))}
@@ -127,29 +155,33 @@ const Settings = () => {
       </div>
 
       <div>
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Alert Preferences</h3>
+        <h3 className="text-lg font-semibold text-white mb-4">Alert Preferences</h3>
         <div className="space-y-4">
           {[
-            { key: "usage", label: "Usage Alerts", desc: "When consumption exceeds normal patterns" },
-            { key: "billing", label: "Billing Updates", desc: "Payment reminders and receipts" },
-            { key: "maintenance", label: "Maintenance Notices", desc: "System updates and maintenance schedules" }
-          ].map(({ key, label, desc }) => (
-            <div key={key} className="flex items-center justify-between">
+            { key: "alerts.usage", label: "Usage Alerts", desc: "Get notified about consumption patterns" },
+            { key: "alerts.billing", label: "Billing Alerts", desc: "Payment reminders and invoices" },
+            { key: "alerts.maintenance", label: "Maintenance Alerts", desc: "System updates and maintenance" }
+          ].map(alert => (
+            <div key={alert.key} className="flex items-center justify-between p-4 bg-white/5 rounded-xl">
               <div>
-                <h4 className="text-sm font-medium text-gray-700">{label}</h4>
-                <p className="text-sm text-gray-500">{desc}</p>
+                <p className="text-white font-medium">{alert.label}</p>
+                <p className="text-sm text-white/60">{alert.desc}</p>
               </div>
               <button
-                onClick={() => handleNotificationChange(`alerts.${key}`, !notifications.alerts[key])}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none ${
-                  notifications.alerts[key] ? "bg-green-600" : "bg-gray-200"
-                }`}
+                onClick={() => {
+                  const [parent, child] = alert.key.split(".")
+                  handleNotificationChange(alert.key, !(notifications as any)[parent][child])
+                }}
+                className="relative"
               >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition duration-200 ease-in-out ${
-                    notifications.alerts[key] ? "translate-x-6" : "translate-x-1"
-                  }`}
-                />
+                {(() => {
+                  const [parent, child] = alert.key.split(".")
+                  return (notifications as any)[parent][child] ? (
+                    <FaToggleOn className="text-4xl text-emerald-500" />
+                  ) : (
+                    <FaToggleOff className="text-4xl text-white/30" />
+                  )
+                })()}
               </button>
             </div>
           ))}
@@ -158,86 +190,139 @@ const Settings = () => {
     </div>
   )
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case "profile":
-        return renderProfileSettings()
-      case "notifications":
-        return renderNotificationSettings()
-      case "billing":
-        return (
-          <div className="text-center py-12">
-            <h3 className="text-lg font-medium text-gray-900">Billing Settings</h3>
-            <p className="text-gray-500 mt-2">Coming soon...</p>
-          </div>
-        )
-      case "security":
-        return (
-          <div className="text-center py-12">
-            <h3 className="text-lg font-medium text-gray-900">Security Settings</h3>
-            <p className="text-gray-500 mt-2">Coming soon...</p>
-          </div>
-        )
-      case "preferences":
-        return (
-          <div className="text-center py-12">
-            <h3 className="text-lg font-medium text-gray-900">Preferences</h3>
-            <p className="text-gray-500 mt-2">Coming soon...</p>
-          </div>
-        )
-      default:
-        return null
-    }
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-4xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex items-center space-x-4">
-          <div className="bg-green-100 p-3 rounded-xl">
-            <BoltIcon className="w-8 h-8 text-green-600" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
-            <p className="text-gray-500">Manage your account preferences</p>
-          </div>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 relative overflow-hidden">
+      {/* Animated Background Orbs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{ duration: 8, repeat: Infinity }}
+          className="absolute -top-1/2 -left-1/2 w-full h-full bg-blue-500 rounded-full filter blur-[120px]"
+        />
+        <motion.div
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{ duration: 10, repeat: Infinity }}
+          className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-cyan-500 rounded-full filter blur-[120px]"
+        />
+      </div>
 
-        {/* Tabs */}
-        <div className="bg-white rounded-xl shadow-sm p-1">
-          <div className="flex space-x-1">
-            {tabs.map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 flex items-center justify-center space-x-2 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
-                  activeTab === tab.id
-                    ? "bg-green-50 text-green-700"
-                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+      {/* Main Container */}
+      <div className="relative z-10 flex min-h-screen">
+        {/* Sidebar */}
+        <motion.div
+          initial={{ x: -100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          className="w-20 bg-white/5 backdrop-blur-2xl border-r border-white/10 flex flex-col items-center py-8 space-y-8"
+        >
+          <div className="text-3xl">
+            <BoltIcon className="text-blue-400" />
+          </div>
+          <div className="flex-1 flex flex-col space-y-4">
+            {sidebarItems.map((item, index) => (
+              <motion.button
+                key={index}
+                whileHover={{ scale: 1.1, x: 5 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate(item.path)}
+                className={`p-3 rounded-xl transition-all ${
+                  item.active
+                    ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg"
+                    : "text-white/60 hover:text-white hover:bg-white/10"
                 }`}
               >
-                <span>{tab.icon}</span>
-                <span>{tab.label}</span>
-              </button>
+                <item.icon className="text-xl" />
+              </motion.button>
             ))}
           </div>
-        </div>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={async () => {
+              const result = await signOutUser();
+              if (result.success) {
+                navigate("/");
+              }
+            }}
+            className="p-3 text-white/60 hover:text-red-400 rounded-xl hover:bg-white/10 transition-all"
+          >
+            <FaSignOutAlt className="text-xl" />
+          </motion.button>
+        </motion.div>
 
-        {/* Content */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          {renderContent()}
-        </div>
+        {/* Main Content */}
+        <div className="flex-1 p-8 overflow-auto">
+          {/* Header */}
+          <motion.div
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="mb-8"
+          >
+            <h1 className="text-3xl font-bold text-white mb-2">Settings</h1>
+            <p className="text-white/70">Manage your account preferences</p>
+          </motion.div>
 
-        {/* Save Button */}
-        <div className="flex justify-end">
-          <button className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200">
-            Save Changes
-          </button>
+          {/* Tabs */}
+          <div className="flex gap-2 mb-8 overflow-x-auto">
+            {tabs.map((tab, index) => (
+              <motion.button
+                key={tab.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all whitespace-nowrap ${
+                  activeTab === tab.id
+                    ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg"
+                    : "bg-white/5 text-white/60 hover:bg-white/10"
+                }`}
+              >
+                <tab.icon />
+                {tab.label}
+              </motion.button>
+            ))}
+          </div>
+
+          {/* Content */}
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-2xl p-8"
+          >
+            {activeTab === "profile" && renderProfileSettings()}
+            {activeTab === "notifications" && renderNotificationSettings()}
+            {activeTab === "billing" && (
+              <div className="text-center py-12">
+                <FaCreditCard className="text-6xl text-white/30 mx-auto mb-4" />
+                <p className="text-white/60">Billing settings coming soon</p>
+              </div>
+            )}
+            {activeTab === "security" && (
+              <div className="text-center py-12">
+                <FaLock className="text-6xl text-white/30 mx-auto mb-4" />
+                <p className="text-white/60">Security settings coming soon</p>
+              </div>
+            )}
+            {activeTab === "preferences" && (
+              <div className="text-center py-12">
+                <FaSlidersH className="text-6xl text-white/30 mx-auto mb-4" />
+                <p className="text-white/60">Preference settings coming soon</p>
+              </div>
+            )}
+          </motion.div>
         </div>
       </div>
     </div>
   )
 }
 
-export default Settings 
+export default Settings

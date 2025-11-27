@@ -1,127 +1,187 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { BoltIcon } from "../components/Icons"
+import { signInUser, signUpUser } from "../services/authService"
+import { useAuth } from "../contexts/AuthContext"
+import { useAlert } from "../contexts/AlertContext"
 
 const Login = () => {
-  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [isVerifying, setIsVerifying] = useState(false)
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [isSignUp, setIsSignUp] = useState(false)
   const navigate = useNavigate()
+  const { showAlert } = useAlert()
+  const { currentUser } = useAuth()
 
-  const handleSubmit = (e) => {
+  // Redirect if already logged in
+  useEffect(() => {
+    if (currentUser) {
+      navigate("/dashboard")
+    }
+  }, [currentUser, navigate])
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    navigate("/login-otp")
-  }
+    setIsProcessing(true)
 
-  const handleVerify = async () => {
-    if (username) {
-      setIsVerifying(true)
-      // Simulate verification delay
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      setIsVerifying(false)
-      navigate("/login-otp")
+    try {
+      let result
+      if (isSignUp) {
+        result = await signUpUser(email, password)
+        if (result.success) {
+          showAlert("Account created! Please check your email for verification.", "success")
+          // Navigate to profile setup
+          navigate("/profile-setup-org")
+        } else {
+          showAlert(result.error || "Sign up failed", "error")
+        }
+      } else {
+        result = await signInUser(email, password)
+        if (result.success) {
+          showAlert("Login successful!", "success")
+          // Check if profile is complete
+          navigate("/dashboard")
+        } else {
+          showAlert(result.error || "Login failed", "error")
+        }
+      }
+    } catch (error: any) {
+      showAlert(error.message || "An error occurred", "error")
+    } finally {
+      setIsProcessing(false)
     }
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-5 bg-gradient-to-br from-green-50 to-green-100 relative overflow-hidden">
+    <div className="min-h-screen flex bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 relative overflow-hidden">
       {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute w-64 h-64 bg-green-200/30 rounded-full -top-20 -left-20 animate-pulse"></div>
-        <div className="absolute w-96 h-96 bg-green-200/30 rounded-full -bottom-32 -right-32 animate-pulse delay-300"></div>
+      <div className="absolute inset-0">
+        <div className="absolute w-96 h-96 bg-white/10 rounded-full -top-48 -left-48 animate-pulse blur-3xl"></div>
+        <div className="absolute w-[500px] h-[500px] bg-white/10 rounded-full -bottom-60 -right-60 animate-pulse delay-700 blur-3xl"></div>
+        <div className="absolute w-72 h-72 bg-white/5 rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse delay-1000 blur-3xl"></div>
       </div>
 
-      <div className="w-full max-w-md flex flex-col items-center relative animate-fade-in">
-        <div className="mb-8 transform hover:scale-110 transition-transform duration-300 flex flex-col items-center">
-          <BoltIcon className="w-16 h-16 text-green-600 animate-pulse mb-4" />
-          <h1 className="text-3xl font-bold text-gray-800">POWERNETPRO</h1>
-          <p className="text-sm text-gray-500 mt-2">For Better Tomorrow</p>
-        </div>
-
-        <div className="w-full bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 transform transition-all duration-300 hover:shadow-xl">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">Welcome Back</h2>
-
-          <form onSubmit={handleSubmit} className="w-full space-y-6">
-            <div className="relative group">
-              <input
-                type="text"
-                className="w-full py-3 px-4 bg-gray-50 rounded-lg text-base outline-none border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300"
-                placeholder="Mail-Id/Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              <button
-                type="button"
-                className={`absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 ${
-                  isVerifying 
-                    ? 'bg-green-100 text-green-600 cursor-wait'
-                    : 'bg-green-600 text-white hover:bg-green-700 active:scale-95'
-                }`}
-                onClick={handleVerify}
-                disabled={isVerifying || !username}
-              >
-                {isVerifying ? (
-                  <span className="flex items-center">
-                    <span className="w-4 h-4 border-2 border-green-600 border-t-transparent rounded-full animate-spin mr-2"></span>
-                    Verifying
-                  </span>
-                ) : (
-                  'Verify'
-                )}
-              </button>
+      {/* Left Side - Branding */}
+      <div className="hidden lg:flex lg:w-1/2 relative z-10 items-center justify-center p-12">
+        <div className="max-w-lg">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-16 h-16 bg-white/20 backdrop-blur-xl border border-white/30 rounded-2xl flex items-center justify-center shadow-2xl">
+              <BoltIcon className="w-8 h-8 text-white" />
             </div>
-
-            <div className="relative group">
-              <input
-                type={isPasswordVisible ? "text" : "password"}
-                className="w-full py-3 px-4 bg-gray-50 rounded-lg text-base outline-none border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <button
-                type="button"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
-                onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-              >
-                {isPasswordVisible ? "👁️" : "👁️‍🗨️"}
-              </button>
+            <div>
+              <h1 className="text-4xl font-bold text-white">PowerNetPro</h1>
+              <p className="text-white/80 mt-1">Smart Energy Management</p>
             </div>
-
-            <div className="flex justify-between items-center">
-              <label className="flex items-center space-x-2 cursor-pointer group">
-                <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500 transition-colors duration-200" />
-                <span className="text-sm text-gray-600 group-hover:text-gray-800 transition-colors duration-200">Remember me</span>
-              </label>
-              <a href="#" className="text-sm text-green-600 hover:text-green-700 transition-colors duration-200">Forgot Password?</a>
-            </div>
-
-            <button 
-              type="submit" 
-              className="w-full bg-green-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!username || !password}
-            >
-              Sign In
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              Don't have an account?{" "}
-              <a href="#" className="text-green-600 hover:text-green-700 font-medium transition-colors duration-200">
-                Sign up
-              </a>
-            </p>
+          </div>
+          <p className="text-white/90 text-lg leading-relaxed mb-8">
+            Experience the future of energy management with real-time monitoring, intelligent analytics, and seamless control at your fingertips.
+          </p>
+          <div className="space-y-4">
+            {["Real-time Monitoring", "Advanced Analytics", "Cost Optimization", "Carbon Tracking"].map((feature, i) => (
+              <div key={i} className="flex items-center gap-3 text-white/90">
+                <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                  ✓
+                </div>
+                <span>{feature}</span>
+              </div>
+            ))}
           </div>
         </div>
+      </div>
 
-        <div className="mt-6 flex space-x-4 text-sm text-gray-600">
-          <a href="#" className="hover:text-gray-800 transition-colors duration-200">Privacy Policy</a>
-          <span>•</span>
-          <a href="#" className="hover:text-gray-800 transition-colors duration-200">Terms of Service</a>
+      {/* Right Side - Login Form */}
+      <div className="flex-1 flex items-center justify-center p-6 relative z-10">
+        <div className="w-full max-w-md">
+          <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl p-10 shadow-2xl">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
+              <p className="text-white/70">Sign in to access your dashboard</p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label className="block text-white/90 text-sm font-medium mb-2">Email Address</label>
+                <input
+                  type="email"
+                  className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all backdrop-blur-sm"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-white/90 text-sm font-medium mb-2">Password</label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all backdrop-blur-sm"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white transition-colors"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? "👁️" : "👁️‍🗨️"}
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <label className="flex items-center gap-2 cursor-pointer group">
+                  <input type="checkbox" className="w-4 h-4 rounded border-white/30 bg-white/20 text-blue-600 focus:ring-white/50" />
+                  <span className="text-sm text-white/80 group-hover:text-white transition-colors">Remember me</span>
+                </label>
+                <a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Forgot Password?</a>
+              </div>
+
+              <button 
+                type="submit" 
+                className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold py-3 px-6 rounded-xl hover:from-blue-700 hover:to-cyan-700 transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                disabled={isProcessing || !email || !password}
+              >
+                {isProcessing ? (
+                  <span className="flex items-center justify-center">
+                    <span className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+                    {isSignUp ? 'Creating Account...' : 'Signing In...'}
+                  </span>
+                ) : (
+                  isSignUp ? 'Create Account' : 'Sign In'
+                )}
+              </button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-sm text-white/70">
+                {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
+                <button 
+                  onClick={() => setIsSignUp(!isSignUp)} 
+                  className="text-white font-medium hover:underline transition-all"
+                >
+                  {isSignUp ? "Sign In" : "Create Account"}
+                </button>
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-8 text-center">
+            <div className="flex items-center gap-4 text-sm text-white/60">
+              <a href="#" className="hover:text-white transition-colors">Privacy</a>
+              <span>•</span>
+              <a href="#" className="hover:text-white transition-colors">Terms</a>
+              <span>•</span>
+              <a href="#" className="hover:text-white transition-colors">Support</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>

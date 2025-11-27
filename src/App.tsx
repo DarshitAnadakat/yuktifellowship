@@ -6,11 +6,14 @@ import ProfileSetupContact from "./pages/ProfileSetupContact.tsx";
 import ProfileSetupKYC from "./pages/ProfileSetupKYC.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import EnergyConsumption from "./pages/EnergyConsumption.tsx";
+import P2PMarket from "./pages/P2PMarket.tsx";
 import Purchases from "./pages/Purchases.tsx";
 import Settings from "./pages/Settings.tsx";
+import FirebaseTest from "./pages/FirebaseTest.tsx";
 import Layout from "./components/Layout.tsx";
 import ErrorBoundary from "./components/ErrorBoundary.tsx";
 import { AlertProvider } from "./contexts/AlertContext";
+import { AuthProvider } from "./contexts/AuthContext";
 import "./index.css";
 
 // Routes that should use the Layout component
@@ -20,10 +23,14 @@ function App() {
   const isProtectedRoute = (path: string) => protectedRoutes.includes(path);
 
   return (
-    <AlertProvider>
-      <ErrorBoundary>
-        <Router>
+    <AuthProvider>
+      <AlertProvider>
+        <ErrorBoundary>
+          <Router>
           <Routes>
+            {/* Test route */}
+            <Route path="/test-firebase" element={<FirebaseTest />} />
+            
             {/* Auth routes */}
             <Route path="/" element={<Login />} />
             <Route path="/login-otp" element={<LoginOTP />} />
@@ -31,43 +38,17 @@ function App() {
             <Route path="/profile-setup-contact" element={<ProfileSetupContact />} />
             <Route path="/profile-setup-kyc" element={<ProfileSetupKYC />} />
 
-            {/* Protected routes with Layout */}
-            <Route
-              path="/dashboard"
-              element={
-                <Layout>
-                  <Dashboard />
-                </Layout>
-              }
-            />
-            <Route
-              path="/energy-consumption"
-              element={
-                <Layout>
-                  <EnergyConsumption />
-                </Layout>
-              }
-            />
-            <Route
-              path="/purchases"
-              element={
-                <Layout>
-                  <Purchases />
-                </Layout>
-              }
-            />
-            <Route
-              path="/settings"
-              element={
-                <Layout>
-                  <Settings />
-                </Layout>
-              }
-            />
+            {/* Protected routes - Pages have their own navigation */}
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/energy-consumption" element={<EnergyConsumption />} />
+            <Route path="/p2p-market" element={<P2PMarket />} />
+            <Route path="/purchases" element={<Purchases />} />
+            <Route path="/settings" element={<Settings />} />
           </Routes>
         </Router>
       </ErrorBoundary>
     </AlertProvider>
+    </AuthProvider>
   );
 }
 
