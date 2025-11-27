@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Data Cleaner - PowerNetPro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .warning-box h3 {
+            color: #856404;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .warning-box p {
+            color: #856404;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .collections-list {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .collections-list h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .collections-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .collections-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #dee2e6;
+            color: #495057;
+            font-size: 14px;
+        }
+
+        .collections-list li:last-child {
+            border-bottom: none;
+        }
+
+        .collections-list li::before {
+            content: "🗑️ ";
+            margin-right: 8px;
+        }
+
+        .auth-box {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .auth-box h3 {
+            color: #155724;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .auth-box p {
+            color: #155724;
+            font-size: 14px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(220, 53, 69, 0.4);
+        }
+
+        .btn-danger:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            display: block;
+        }
+
+        .progress {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e9ecef;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .log {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            display: none;
+        }
+
+        .log-item {
+            padding: 5px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .log-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 Firebase Data Cleaner</h1>
+        <p class="subtitle">PowerNetPro Admin Tool</p>
+
+        <div class="warning-box">
+            <h3>⚠️ Warning</h3>
+            <p>This will permanently delete all data from Firestore collections. This action cannot be undone. Please make sure you understand what you're doing.</p>
+        </div>
+
+        <div class="collections-list">
+            <h3>Collections to be cleaned:</h3>
+            <ul>
+                <li>energy_listings</li>
+                <li>energy_transactions</li>
+                <li>user_wallets</li>
+                <li>users</li>
+                <li>admins</li>
+            </ul>
+        </div>
+
+        <div class="auth-box">
+            <h3>✅ Protected Data</h3>
+            <p>Authentication accounts will NOT be deleted. Users can still log in after cleanup.</p>
+        </div>
+
+        <button id="cleanBtn" class="btn btn-danger" onclick="cleanFirebase()">
+            🗑️ Clean All Firestore Data
+        </button>
+
+        <button class="btn btn-secondary" onclick="location.reload()">
+            🔄 Reset Page
+        </button>
+
+        <div id="status" class="status"></div>
+
+        <div id="progress" class="progress">
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill">0%</div>
+            </div>
+        </div>
+
+        <div id="log" class="log"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, getDocs, deleteDoc, doc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB_2HQIAjUaFbOxh3PQMaAGYnUmgWBOOQo",
+            authDomain: "consumer-b6814.firebaseapp.com",
+            projectId: "consumer-b6814",
+            storageBucket: "consumer-b6814.firebasestorage.app",
+            messagingSenderId: "858778365273",
+            appId: "1:858778365273:web:d66ae3cfd24d1d3cde5d7d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const collections = [
+            'energy_listings',
+            'energy_transactions',
+            'user_wallets',
+            'users',
+            'admins'
+        ];
+
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+
+        function updateProgress(current, total) {
+            const progress = document.getElementById('progress');
+            const progressFill = document.getElementById('progressFill');
+            progress.style.display = 'block';
+            const percentage = Math.round((current / total) * 100);
+            progressFill.style.width = percentage + '%';
+            progressFill.textContent = percentage + '%';
+        }
+
+        function addLog(message) {
+            const log = document.getElementById('log');
+            log.style.display = 'block';
+            const logItem = document.createElement('div');
+            logItem.className = 'log-item';
+            logItem.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            log.appendChild(logItem);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        window.cleanFirebase = async function() {
+            const cleanBtn = document.getElementById('cleanBtn');
+            
+            if (!confirm('⚠️ Are you absolutely sure you want to delete ALL Firestore data?\n\nThis will remove:\n• All energy listings\n• All transactions\n• All user wallets\n• All user profiles\n• All admin privileges\n\nAuthentication accounts will remain.\n\nType YES to continue.')) {
+                return;
+            }
+
+            const confirmation = prompt('Type "DELETE ALL" to confirm:');
+            if (confirmation !== 'DELETE ALL') {
+                showStatus('❌ Cleanup cancelled. Confirmation text did not match.', 'error');
+                return;
+            }
+
+            cleanBtn.disabled = true;
+            showStatus('🔄 Starting cleanup process...', 'info');
+            addLog('Cleanup process initiated');
+
+            let totalDeleted = 0;
+            let totalCollections = collections.length;
+            let currentCollection = 0;
+
+            try {
+                for (const collectionName of collections) {
+                    currentCollection++;
+                    addLog(`Processing collection: ${collectionName}`);
+                    
+                    const querySnapshot = await getDocs(collection(db, collectionName));
+                    const docsCount = querySnapshot.size;
+                    
+                    addLog(`Found ${docsCount} documents in ${collectionName}`);
+                    
+                    if (docsCount === 0) {
+                        addLog(`Skipping empty collection: ${collectionName}`);
+                        updateProgress(currentCollection, totalCollections);
+                        continue;
+                    }
+
+                    let deletedInCollection = 0;
+                    
+                    for (const docSnapshot of querySnapshot.docs) {
+                        await deleteDoc(doc(db, collectionName, docSnapshot.id));
+                        deletedInCollection++;
+                        totalDeleted++;
+                    }
+                    
+                    addLog(`✅ Deleted ${deletedInCollection} documents from ${collectionName}`);
+                    updateProgress(currentCollection, totalCollections);
+                }
+
+                showStatus(`✅ Cleanup completed successfully! Deleted ${totalDeleted} documents from ${totalCollections} collections.`, 'success');
+                addLog(`Cleanup completed. Total documents deleted: ${totalDeleted}`);
+                addLog('Authentication accounts remain intact.');
+                
+            } catch (error) {
+                console.error('Error during cleanup:', error);
+                showStatus(`❌ Error during cleanup: ${error.message}`, 'error');
+                addLog(`ERROR: ${error.message}`);
+                cleanBtn.disabled = false;
+            }
+        };
+    </script>
+</body>
+</html>
