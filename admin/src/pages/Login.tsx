@@ -22,7 +22,7 @@ const Login = () => {
 
   useEffect(() => {
     if (currentUser) {
-      navigate("/dashboard");
+      navigate("/admin/dashboard");
     }
   }, [currentUser, navigate]);
 
@@ -47,7 +47,7 @@ const Login = () => {
       setIsLoading(true);
       try {
         await login(formData.username, formData.password);
-        navigate("/dashboard");
+        navigate("/admin/dashboard");
       } catch (error: any) {
         setErrors(prev => ({ 
           ...prev, 
@@ -328,7 +328,7 @@ const Login = () => {
                 <span>•</span>
                 <a href="#" className="hover:text-white transition-colors">Privacy</a>
                 <span>•</span>
-                <Link to="/" className="hover:text-white transition-colors">Home</Link>
+                <Link to="/admin" className="hover:text-white transition-colors">Home</Link>
               </div>
             </motion.div>
           </div>

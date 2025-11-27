@@ -66,7 +66,7 @@ const Dashboard = () => {
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!currentUser) {
-      navigate("/login");
+      navigate("/admin/login");
     }
   }, [currentUser, navigate]);
 
@@ -296,7 +296,7 @@ const Dashboard = () => {
             whileHover={{ scale: 1.05 }} 
             onClick={async () => {
               await logout();
-              navigate("/login");
+              navigate("/admin/login");
             }}
             className="px-4 py-2 bg-gradient-to-r from-red-600 to-rose-600 rounded-full text-white flex items-center gap-2"
           >

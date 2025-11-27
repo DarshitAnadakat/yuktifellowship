@@ -122,7 +122,7 @@ const KPIsDashboard = () => {
       {/* Top Navigation */}
       <div className="fixed top-0 left-0 right-0 h-16 bg-black/30 backdrop-blur-xl border-b border-white/10 z-50 flex items-center justify-between px-6">
         <div className="flex items-center gap-4">
-          <Link to="/ecosystem">
+          <Link to="/admin/ecosystem">
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
@@ -150,7 +150,7 @@ const KPIsDashboard = () => {
             <span className="text-white/70 text-sm">Energy Exported:</span>
             <span className="text-blue-400 font-bold">90 kWh</span>
           </div>
-          <Link to="/">
+          <Link to="/admin">
             <motion.button 
               whileHover={{ scale: 1.05 }} 
               className="px-4 py-2 bg-gradient-to-r from-red-600 to-rose-600 rounded-xl text-white flex items-center gap-2"
@@ -172,7 +172,7 @@ const KPIsDashboard = () => {
         >
           <div className="flex justify-between items-center">
             <div className="flex gap-2">
-              <Link to="/ecosystem">
+              <Link to="/admin/ecosystem">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   className="px-6 py-2 rounded-xl font-medium text-white/70 hover:bg-white/10 transition-all"
@@ -180,7 +180,7 @@ const KPIsDashboard = () => {
                   Ecosystem View
                 </motion.button>
               </Link>
-              <Link to="/kpis">
+              <Link to="/admin/kpis">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   className="px-6 py-2 rounded-xl font-medium bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg"
@@ -188,7 +188,7 @@ const KPIsDashboard = () => {
                   KPI Analytics
                 </motion.button>
               </Link>
-              <Link to="/trends">
+              <Link to="/admin/trends">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   className="px-6 py-2 rounded-xl font-medium text-white/70 hover:bg-white/10 transition-all"

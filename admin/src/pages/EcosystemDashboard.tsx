@@ -42,7 +42,7 @@ const EcosystemDashboard = () => {
       {/* Top Navigation */}
       <div className="fixed top-0 left-0 right-0 h-16 bg-black/30 backdrop-blur-xl border-b border-white/10 z-50 flex items-center justify-between px-6">
         <div className="flex items-center gap-4">
-          <Link to="/dashboard">
+          <Link to="/admin/dashboard">
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
@@ -72,7 +72,7 @@ const EcosystemDashboard = () => {
           <motion.button whileHover={{ scale: 1.1 }} className="p-2 bg-white/10 rounded-xl hover:bg-white/20 transition-colors">
             <FaDownload className="text-white text-lg" />
           </motion.button>
-          <Link to="/">
+          <Link to="/admin">
             <motion.button whileHover={{ scale: 1.05 }} className="px-4 py-2 bg-gradient-to-r from-red-600 to-rose-600 rounded-xl text-white flex items-center gap-2">
               <FaSignOutAlt /> Sign Out
             </motion.button>
@@ -128,7 +128,7 @@ const EcosystemDashboard = () => {
             >
               Ecosystem View
             </motion.button>
-            <Link to="/kpis">
+            <Link to="/admin/kpis">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 className="px-6 py-2 rounded-xl font-medium text-white/70 hover:bg-white/10 transition-all"
@@ -136,7 +136,7 @@ const EcosystemDashboard = () => {
                 KPI Analytics
               </motion.button>
             </Link>
-            <Link to="/trends">
+            <Link to="/admin/trends">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 className="px-6 py-2 rounded-xl font-medium text-white/70 hover:bg-white/10 transition-all"

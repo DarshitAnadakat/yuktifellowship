@@ -119,7 +119,7 @@ const TransactionsDashboard = () => {
             <FaCog className="text-white text-xl" />
           </motion.button>
 
-          <Link to="/">
+          <Link to="/admin">
             <motion.button whileHover={{ scale: 1.05 }} className="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full text-white flex items-center gap-2">
               <FaSignOutAlt /> Sign Out
             </motion.button>
