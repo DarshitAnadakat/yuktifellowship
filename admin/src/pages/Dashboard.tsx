@@ -363,22 +363,22 @@ const Dashboard = () => {
           </div>
 
           <div className="flex gap-3">
-            <Link to="/transactions">
+            <Link to="/admin/transactions">
               <motion.button whileHover={{ scale: 1.05 }} className="px-6 py-2 bg-violet-500/20 border border-violet-400/30 rounded-xl text-violet-300 hover:bg-violet-500/30 transition-all flex items-center gap-2">
                 <FaBolt /> Transactions
               </motion.button>
             </Link>
-            <Link to="/ecosystem">
+            <Link to="/admin/ecosystem">
               <motion.button whileHover={{ scale: 1.05 }} className="px-6 py-2 bg-cyan-500/20 border border-cyan-400/30 rounded-xl text-cyan-300 hover:bg-cyan-500/30 transition-all flex items-center gap-2">
                 <FaNetworkWired /> Network View
               </motion.button>
             </Link>
-            <Link to="/kpis">
+            <Link to="/admin/kpis">
               <motion.button whileHover={{ scale: 1.05 }} className="px-6 py-2 bg-emerald-500/20 border border-emerald-400/30 rounded-xl text-emerald-300 hover:bg-emerald-500/30 transition-all flex items-center gap-2">
                 <FaChartBar /> Analytics
               </motion.button>
             </Link>
-            <Link to="/trends">
+            <Link to="/admin/trends">
               <motion.button whileHover={{ scale: 1.05 }} className="px-6 py-2 bg-amber-500/20 border border-amber-400/30 rounded-xl text-amber-300 hover:bg-amber-500/30 transition-all flex items-center gap-2">
                 <FaChartLine /> Trends
               </motion.button>
@@ -640,7 +640,7 @@ const Dashboard = () => {
                 </div>
 
                 <div className="mt-6 pt-4 border-t border-white/10">
-                  <Link to="/ecosystem">
+                  <Link to="/admin/ecosystem">
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       className="w-full py-2 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl text-white font-medium hover:shadow-lg hover:shadow-blue-500/50 transition-all"
