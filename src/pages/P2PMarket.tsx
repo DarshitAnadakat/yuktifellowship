@@ -277,8 +277,7 @@ const P2PMarket = () => {
   const filteredListings = listings.filter(listing => {
     const matchesSearch = listing.sellerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          listing.energyType?.toLowerCase().includes(searchTerm.toLowerCase())
-    const notOwnListing = currentUser && listing.sellerId !== currentUser.uid
-    return matchesSearch && listing.status === "active" && notOwnListing
+    return matchesSearch && listing.status === "active"
   })
 
   const filteredTransactions = transactions.filter(transaction => {
@@ -496,18 +495,24 @@ const P2PMarket = () => {
                       </div>
                     </div>
 
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => {
-                        setSelectedListing(listing)
-                        setBuyForm({ ...buyForm, units: listing.units })
-                        setShowBuyModal(true)
-                      }}
-                      className="w-full py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-medium hover:shadow-lg transition-all"
-                    >
-                      Buy Now
-                    </motion.button>
+                    {listing.sellerId === currentUser?.uid ? (
+                      <div className="w-full py-3 bg-white/10 border border-white/20 text-white/50 rounded-xl font-medium text-center">
+                        Your Listing
+                      </div>
+                    ) : (
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => {
+                          setSelectedListing(listing)
+                          setBuyForm({ ...buyForm, units: listing.units })
+                          setShowBuyModal(true)
+                        }}
+                        className="w-full py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-medium hover:shadow-lg transition-all"
+                      >
+                        Buy Now
+                      </motion.button>
+                    )}
                   </motion.div>
                 ))}
 
