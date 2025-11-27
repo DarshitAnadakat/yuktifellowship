@@ -136,7 +136,7 @@ const TransactionsDashboard = () => {
         >
           <div>
             <div className="flex items-center gap-4 mb-2">
-              <Link to="/dashboard">
+              <Link to="/admin/dashboard">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
