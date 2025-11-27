@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FaSignOutAlt, FaBolt, FaSearch, FaBell, FaCog, FaUser, FaExchangeAlt, FaArrowUp, FaArrowDown, FaCheckCircle, FaSpinner, FaTimes, FaCalendar, FaArrowLeft, FaWallet } from "react-icons/fa";
+import { FaSignOutAlt, FaBolt, FaSearch, FaBell, FaCog, FaUser, FaExchangeAlt, FaArrowUp, FaArrowDown, FaCheckCircle, FaSpinner, FaTimes, FaArrowLeft, FaWallet } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { collection, query, orderBy, onSnapshot, where, getDocs } from "firebase/firestore";
@@ -178,8 +178,6 @@ const UserManagement = () => {
     user.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     user.id.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  const selectedUser = users.find(u => u.id === selectedUserId);
 
   // Calculate user stats
   const totalPurchases = transactions.filter(t => t.buyerId === selectedUserId && t.status === "completed").length;

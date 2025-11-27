@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FaSignOutAlt, FaBolt, FaSearch, FaBell, FaCog, FaExchangeAlt, FaArrowUp, FaArrowDown, FaCheckCircle, FaSpinner, FaTimes, FaUser, FaCalendar, FaFilter, FaArrowLeft } from "react-icons/fa";
+import { FaSignOutAlt, FaBolt, FaSearch, FaBell, FaCog, FaExchangeAlt, FaArrowUp, FaArrowDown, FaCheckCircle, FaSpinner, FaTimes, FaCalendar, FaFilter, FaArrowLeft } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
