@@ -6,7 +6,7 @@ import { BoltIcon } from "../components/Icons"
 import { Line, Bar } from "react-chartjs-2"
 import { motion } from "framer-motion"
 import { 
-  FaBolt, FaChartLine, FaWallet, FaLeaf, FaHome, FaChartBar, 
+  FaBolt, FaChartLine, FaWallet, FaLeaf, FaHome, 
   FaShoppingCart, FaCog, FaSignOutAlt, FaSync, FaArrowUp, 
   FaArrowDown, FaClock, FaSolarPanel, FaFan
 } from "react-icons/fa"

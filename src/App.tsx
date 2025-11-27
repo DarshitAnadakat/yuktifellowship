@@ -10,18 +10,12 @@ import P2PMarket from "./pages/P2PMarket.tsx";
 import Purchases from "./pages/Purchases.tsx";
 import Settings from "./pages/Settings.tsx";
 import FirebaseTest from "./pages/FirebaseTest.tsx";
-import Layout from "./components/Layout.tsx";
 import ErrorBoundary from "./components/ErrorBoundary.tsx";
 import { AlertProvider } from "./contexts/AlertContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import "./index.css";
 
-// Routes that should use the Layout component
-const protectedRoutes = ["/dashboard", "/energy-consumption", "/purchases", "/settings"];
-
 function App() {
-  const isProtectedRoute = (path: string) => protectedRoutes.includes(path);
-
   return (
     <AuthProvider>
       <AlertProvider>

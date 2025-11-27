@@ -28,7 +28,7 @@ const ProfileSetupOrg = () => {
   const orgTypes = ["Private Limited", "Public Limited", "Partnership", "Proprietorship", "Others"]
   const industries = ["Manufacturing", "Energy", "Technology", "Retail", "Others"]
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }

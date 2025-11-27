@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { BoltIcon, HomeIcon, ChartIcon, DocumentIcon, SettingsIcon, LogoutIcon, AlertIcon } from "./Icons";
 import { signOutUser } from "../services/authService";
@@ -10,7 +10,6 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -28,7 +27,7 @@ const Layout = ({ children }: LayoutProps) => {
         {/* Logo */}
         <div className="flex items-center gap-3 hover:scale-105 transition-transform cursor-pointer">
           <div className="w-12 h-12 bg-gradient-to-br from-violet-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-            <BoltIcon className="w-6 h-6 text-white" />
+            <BoltIcon />
           </div>
           <div>
             <h1 className="font-bold text-xl bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
@@ -59,7 +58,7 @@ const Layout = ({ children }: LayoutProps) => {
         {/* Right Actions */}
         <div className="flex items-center gap-3">
           <button className="relative p-3 hover:bg-slate-100 rounded-xl transition-all hover:scale-110">
-            <AlertIcon className="w-5 h-5 text-slate-600" />
+            <AlertIcon />
             <span className="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full animate-pulse"></span>
           </button>
           
@@ -74,7 +73,7 @@ const Layout = ({ children }: LayoutProps) => {
             }}
             className="px-4 py-2 bg-gradient-to-r from-rose-500 to-pink-600 text-white rounded-xl hover:shadow-lg transition-all hover:scale-105 flex items-center gap-2"
           >
-            <LogoutIcon className="w-4 h-4" />
+            <LogoutIcon />
             <span className="hidden md:inline">Sign Out</span>
           </button>
         </div>

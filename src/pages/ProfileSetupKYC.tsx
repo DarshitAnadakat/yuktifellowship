@@ -69,7 +69,7 @@ const ProfileSetupKYC = () => {
           <div className="flex items-center gap-3">
             <FaUpload className="text-2xl text-cyan-300 group-hover:scale-110 transition-transform" />
             <span className="text-white/80">
-              {formData[name as keyof typeof formData] && typeof formData[name as keyof typeof formData] === 'object' && (formData[name as keyof typeof formData] as File).name ? (formData[name as keyof typeof formData] as File).name : `Upload ${label}`}
+              {formData[name as keyof typeof formData] && typeof formData[name as keyof typeof formData] === 'object' && (formData[name as keyof typeof formData] as unknown as File).name ? (formData[name as keyof typeof formData] as unknown as File).name : `Upload ${label}`}
             </span>
           </div>
         </label>
